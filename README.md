@@ -1,9 +1,11 @@
-# 0916Class - AIOT 數據分析
+<img width="1259" height="757" alt="image" src="https://github.com/user-attachments/assets/46b12760-77d1-4510-9e0f-4598ca9902da" /># 0916Class - AIOT 數據分析
 
 > 📚 **課程名稱**：AIOT 數據分析  
 > 👤 **作者 / 開發者**：白育誠 (Yu-Cheng Bai)  
 > 💼 **專業職稱**：Embedded & Software Engineer  
-> 🌐 **LIVE DEMO 網站**：[https://jex1235-coder.github.io/0916Class/](https://jex1235-coder.github.io/0916Class/)  
+> 🌐 **LIVE DEMO 網站**：[https://jex1235-coder.github.io/0916Class/](https://jex1235-coder.github.io/0916Class/)
+> <img width="1259" height="757" alt="image" src="https://github.com/user-attachments/assets/0845acfa-6b78-4946-9789-cc3cf0f6e027" />
+
 > 📦 **GitHub 儲存庫**：[https://github.com/jex1235-coder/0916Class](https://github.com/jex1235-coder/0916Class)  
 
 ---
