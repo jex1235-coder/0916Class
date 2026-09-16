@@ -1,0 +1,970 @@
+<!DOCTYPE html>
+<html lang="zh-TW" class="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>白育誠 | Embedded & Software Engineer - Roadmap & Dashboard</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- Lucide Icons -->
+  <script src="https://unpkg.com/lucide@latest"></script>
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['Inter', 'system-ui', 'sans-serif'],
+            mono: ['JetBrains Mono', 'monospace'],
+          },
+          colors: {
+            slate: {
+              850: '#111827',
+              900: '#0f172a',
+              950: '#080c14',
+            },
+            brand: {
+              purple: '#8b5cf6',
+              yellow: '#eab308',
+              emerald: '#10b981',
+              blue: '#3b82f6',
+            }
+          }
+        }
+      }
+    }
+  </script>
+  <style>
+    /* Roadmap.sh Background Dot Grid */
+    .bg-dot-grid {
+      background-image: radial-gradient(rgba(148, 163, 184, 0.18) 1.2px, transparent 1.2px);
+      background-size: 24px 24px;
+    }
+    .light .bg-dot-grid {
+      background-image: radial-gradient(rgba(100, 116, 139, 0.22) 1.2px, transparent 1.2px);
+    }
+    
+    /* Custom scrollbars */
+    ::-webkit-scrollbar {
+      width: 8px;
+      height: 8px;
+    }
+    ::-webkit-scrollbar-track {
+      background: transparent;
+    }
+    ::-webkit-scrollbar-thumb {
+      background: rgba(148, 163, 184, 0.2);
+      border-radius: 4px;
+    }
+    ::-webkit-scrollbar-thumb:hover {
+      background: rgba(148, 163, 184, 0.4);
+    }
+
+    /* Node pulse effect */
+    @keyframes pulse-border {
+      0%, 100% { border-color: rgba(234, 179, 8, 0.9); box-shadow: 0 0 15px rgba(234, 179, 8, 0.25); }
+      50% { border-color: rgba(234, 179, 8, 0.4); box-shadow: 0 0 5px rgba(234, 179, 8, 0.1); }
+    }
+    .node-in-progress {
+      animation: pulse-border 2.5s infinite ease-in-out;
+    }
+  </style>
+</head>
+<body class="bg-slate-950 text-slate-100 font-sans min-h-screen flex flex-col transition-colors duration-200 antialiased selection:bg-purple-500/30 selection:text-purple-300">
+
+  <!-- ================= TOP NAVIGATION BAR (Roadmap.sh Style) ================= -->
+  <header class="sticky top-0 z-40 border-b border-slate-800/80 bg-slate-950/85 backdrop-blur-md">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
+      
+      <!-- Brand & Breadcrumbs -->
+      <div class="flex items-center gap-3">
+        <a href="#" class="flex items-center gap-2 group">
+          <div class="w-8 h-8 rounded-lg bg-gradient-to-tr from-purple-600 to-indigo-500 flex items-center justify-center text-white font-bold text-sm shadow-md shadow-purple-500/20 group-hover:scale-105 transition-transform">
+            <span>BYC</span>
+          </div>
+          <span class="font-bold text-base tracking-tight text-white group-hover:text-purple-400 transition-colors">roadmap<span class="text-purple-400">.sh</span></span>
+        </a>
+        <span class="text-slate-600 hidden sm:inline">/</span>
+        <div class="hidden sm:flex items-center gap-2 text-xs font-mono text-slate-400">
+          <span class="px-2 py-0.5 rounded bg-slate-800 border border-slate-700/60 text-slate-300">Personal</span>
+          <span>/</span>
+          <span id="nav-title" class="text-purple-400 font-medium">Embedded & Software</span>
+        </div>
+      </div>
+
+      <!-- Center status indicator -->
+      <div class="hidden md:flex items-center gap-2 px-3 py-1 rounded-full bg-slate-900/80 border border-slate-800 text-xs font-mono">
+        <span class="relative flex h-2 w-2">
+          <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
+          <span class="relative inline-flex rounded-full h-2 w-2 bg-emerald-500"></span>
+        </span>
+        <span class="text-slate-400">STATUS:</span>
+        <span id="nav-status-text" class="text-emerald-400 font-medium">AVAILABLE FOR WORK</span>
+      </div>
+
+      <!-- Actions (Time format, Theme toggle, Edit Profile) -->
+      <div class="flex items-center gap-2.5">
+        <!-- 12h/24h toggle -->
+        <button id="clock-mode-btn" onclick="toggleClockMode()" title="切換 12/24 小時制" class="flex items-center gap-1 px-2.5 py-1 text-xs font-mono rounded-lg bg-slate-900 border border-slate-800 hover:border-slate-700 text-slate-300 hover:text-white transition">
+          <i data-lucide="clock" class="w-3.5 h-3.5 text-purple-400"></i>
+          <span id="clock-mode-label">24H</span>
+        </button>
+
+        <!-- Edit Profile Trigger -->
+        <button onclick="openProfileModal()" title="編輯個人資訊" class="p-2 rounded-lg bg-slate-900 border border-slate-800 hover:border-purple-500/50 hover:bg-slate-850 text-slate-300 hover:text-purple-300 transition">
+          <i data-lucide="user-cog" class="w-4 h-4"></i>
+        </button>
+
+        <!-- Reset Defaults -->
+        <button onclick="resetDefaults()" title="重設為預設值" class="hidden sm:block p-2 rounded-lg bg-slate-900 border border-slate-800 hover:border-slate-700 text-slate-400 hover:text-slate-200 transition">
+          <i data-lucide="rotate-ccw" class="w-4 h-4"></i>
+        </button>
+      </div>
+
+    </div>
+  </header>
+
+  <!-- ================= MAIN CONTENT WRAPPER ================= -->
+  <main class="flex-grow bg-dot-grid relative">
+    
+    <!-- Subtle top ambient light -->
+    <div class="absolute top-0 left-1/2 -translate-x-1/2 w-full max-w-4xl h-56 bg-purple-600/10 blur-[100px] pointer-events-none"></div>
+
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-12 space-y-10 relative z-10">
+
+      <!-- ================= HERO SECTION & LIVE TIME DASHBOARD ================= -->
+      <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
+
+        <!-- Left: Profile & Developer Bio Card (7 cols) -->
+        <div class="lg:col-span-7 bg-slate-900/80 border border-slate-800 rounded-2xl p-6 sm:p-8 backdrop-blur shadow-xl relative overflow-hidden flex flex-col justify-between">
+          <div class="space-y-4">
+            
+            <div class="flex items-center justify-between">
+              <div class="flex items-center gap-2">
+                <span class="px-2.5 py-1 rounded-md bg-purple-500/10 border border-purple-500/20 text-purple-300 text-xs font-mono font-medium">
+                  DEVELOPER ROADMAP & PROFILE
+                </span>
+                <span class="px-2 py-0.5 rounded-md bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 text-xs font-mono flex items-center gap-1.5">
+                  <span class="w-1.5 h-1.5 rounded-full bg-emerald-400"></span>
+                  <span id="badge-status-text">Available</span>
+                </span>
+              </div>
+              <button onclick="openProfileModal()" class="text-xs font-mono text-slate-400 hover:text-purple-300 flex items-center gap-1 transition">
+                <i data-lucide="edit-3" class="w-3.5 h-3.5"></i>
+                <span>編輯資料</span>
+              </button>
+            </div>
+
+            <!-- Name & Title -->
+            <div class="space-y-1 pt-1">
+              <div class="flex items-baseline gap-3">
+                <h1 id="profile-name" class="text-3xl sm:text-4xl lg:text-5xl font-extrabold tracking-tight text-white">白育誠</h1>
+                <span class="text-slate-400 text-sm font-mono">(Yu-Cheng Bai)</span>
+              </div>
+              <p id="profile-role" class="text-lg sm:text-xl font-medium text-purple-400">Embedded & Software Engineer</p>
+            </div>
+
+            <!-- Bio description -->
+            <p id="profile-bio" class="text-slate-300 text-sm sm:text-base leading-relaxed max-w-2xl">
+              專注於微控制器韌體設計、RTOS 多工系統架構、硬體通訊協議及物聯網邊緣運算。秉持簡潔、穩健且高可靠度的軟硬體整合工程思維。
+            </p>
+
+          </div>
+
+          <!-- Bottom tags & quick links -->
+          <div class="pt-6 border-t border-slate-800/80 flex flex-wrap items-center justify-between gap-4 mt-6">
+            <div class="flex flex-wrap items-center gap-2">
+              <span class="px-2.5 py-1 text-xs font-mono rounded bg-slate-800/80 border border-slate-700/50 text-slate-300">C / C++</span>
+              <span class="px-2.5 py-1 text-xs font-mono rounded bg-slate-800/80 border border-slate-700/50 text-slate-300">ARM Cortex-M</span>
+              <span class="px-2.5 py-1 text-xs font-mono rounded bg-slate-800/80 border border-slate-700/50 text-slate-300">FreeRTOS</span>
+              <span class="px-2.5 py-1 text-xs font-mono rounded bg-slate-800/80 border border-slate-700/50 text-slate-300">Embedded Linux</span>
+            </div>
+
+            <div class="flex items-center gap-3">
+              <a href="https://github.com" target="_blank" class="p-2 rounded-lg bg-slate-800 hover:bg-slate-750 text-slate-300 hover:text-white border border-slate-700/60 transition" title="GitHub">
+                <i data-lucide="github" class="w-4 h-4"></i>
+              </a>
+              <a href="mailto:contact@example.com" id="profile-email-link" class="p-2 rounded-lg bg-slate-800 hover:bg-slate-750 text-slate-300 hover:text-white border border-slate-700/60 transition" title="Email">
+                <i data-lucide="mail" class="w-4 h-4"></i>
+              </a>
+            </div>
+          </div>
+
+        </div>
+
+        <!-- Right: Real-time Live Clock & Time Metrics Card (5 cols) -->
+        <div class="lg:col-span-5 bg-slate-900/80 border border-slate-800 rounded-2xl p-6 sm:p-8 backdrop-blur shadow-xl flex flex-col justify-between space-y-6">
+          
+          <div>
+            <!-- Header with Timezone -->
+            <div class="flex items-center justify-between mb-3">
+              <div class="flex items-center gap-2 text-xs font-mono text-slate-400">
+                <i data-lucide="radio" class="w-3.5 h-3.5 text-purple-400 animate-pulse"></i>
+                <span>CURRENT LOCAL TIME</span>
+              </div>
+              <span id="timezone-pill" class="px-2 py-0.5 rounded bg-slate-800 text-xs font-mono text-purple-300 border border-slate-700/50">
+                UTC+8 (Taipei)
+              </span>
+            </div>
+
+            <!-- Digital Clock Display (Large) -->
+            <div class="py-2">
+              <div class="flex items-baseline font-mono font-bold tracking-tight text-white select-none">
+                <span id="clock-time" class="text-4xl sm:text-5xl lg:text-6xl text-transparent bg-clip-text bg-gradient-to-r from-white via-slate-100 to-purple-200">
+                  00:00:00
+                </span>
+                <span id="clock-period" class="ml-2 text-base sm:text-lg font-medium text-purple-400"></span>
+              </div>
+              <p id="clock-date" class="text-slate-400 font-mono text-xs sm:text-sm mt-1">載入中...</p>
+            </div>
+          </div>
+
+          <!-- Developer Roadmap Time Metrics (Day Progress & Year Progress) -->
+          <div class="space-y-4 pt-2 border-t border-slate-800/80">
+            
+            <!-- Day Progress -->
+            <div class="space-y-1.5">
+              <div class="flex items-center justify-between text-xs font-mono">
+                <span class="text-slate-400 flex items-center gap-1.5">
+                  <i data-lucide="sun" class="w-3.5 h-3.5 text-amber-400"></i>
+                  <span>今日已度過 (Day Progress)</span>
+                </span>
+                <span id="day-progress-text" class="text-amber-400 font-semibold">0.0%</span>
+              </div>
+              <div class="w-full h-2 rounded-full bg-slate-800 overflow-hidden border border-slate-800">
+                <div id="day-progress-bar" class="h-full rounded-full bg-gradient-to-r from-amber-500 to-yellow-400 transition-all duration-1000" style="width: 0%"></div>
+              </div>
+            </div>
+
+            <!-- Year Progress -->
+            <div class="space-y-1.5">
+              <div class="flex items-center justify-between text-xs font-mono">
+                <span class="text-slate-400 flex items-center gap-1.5">
+                  <i data-lucide="calendar" class="w-3.5 h-3.5 text-purple-400"></i>
+                  <span id="year-label">2026 年度進度 (Year Progress)</span>
+                </span>
+                <span id="year-progress-text" class="text-purple-400 font-semibold">0.0%</span>
+              </div>
+              <div class="w-full h-2 rounded-full bg-slate-800 overflow-hidden border border-slate-800">
+                <div id="year-progress-bar" class="h-full rounded-full bg-gradient-to-r from-purple-500 to-indigo-400 transition-all duration-1000" style="width: 0%"></div>
+              </div>
+            </div>
+
+          </div>
+
+        </div>
+
+      </div>
+
+      <!-- ================= ROADMAP TREE SECTION ================= -->
+      <section class="space-y-6 pt-4">
+        
+        <!-- Roadmap Title & Filter Controls -->
+        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-2 border-b border-slate-800">
+          <div>
+            <div class="flex items-center gap-2">
+              <span class="w-2.5 h-2.5 rounded-sm bg-purple-500"></span>
+              <h2 class="text-xl sm:text-2xl font-bold tracking-tight text-white">技能與技術路線圖 (Skills Roadmap)</h2>
+            </div>
+            <p class="text-xs sm:text-sm text-slate-400 mt-0.5">點擊任一節點可展開詳細說明與自訂完成狀態</p>
+          </div>
+
+          <!-- Status Legend -->
+          <div class="flex items-center flex-wrap gap-2 text-xs font-mono">
+            <span class="inline-flex items-center gap-1 px-2.5 py-1 rounded bg-emerald-500/10 border border-emerald-500/30 text-emerald-300">
+              <span class="w-2 h-2 rounded-full bg-emerald-400"></span>
+              <span>已掌握 (Done)</span>
+            </span>
+            <span class="inline-flex items-center gap-1 px-2.5 py-1 rounded bg-yellow-500/10 border border-yellow-500/30 text-yellow-300">
+              <span class="w-2 h-2 rounded-full bg-yellow-400"></span>
+              <span>深造中 (In Progress)</span>
+            </span>
+            <span class="inline-flex items-center gap-1 px-2.5 py-1 rounded bg-slate-800 border border-slate-700 text-slate-300">
+              <span class="w-2 h-2 rounded-full bg-slate-500"></span>
+              <span>未來規劃 (Planned)</span>
+            </span>
+          </div>
+        </div>
+
+        <!-- Roadmap Interactive Flowchart Nodes Grid -->
+        <div id="roadmap-container" class="space-y-10">
+          <!-- Dynamic Phases will be rendered here by JS -->
+        </div>
+
+      </section>
+
+    </div>
+  </main>
+
+  <!-- ================= SLIDE-OVER DRAWER FOR TOPIC DETAILS ================= -->
+  <div id="drawer-backdrop" onclick="closeDrawer()" class="fixed inset-0 bg-black/60 backdrop-blur-sm z-50 transition-opacity duration-300 opacity-0 pointer-events-none"></div>
+
+  <aside id="topic-drawer" class="fixed top-0 right-0 h-full w-full max-w-lg bg-slate-900 border-l border-slate-800 shadow-2xl z-50 flex flex-col transform translate-x-full transition-transform duration-300 ease-out">
+    
+    <!-- Drawer Header -->
+    <div class="p-6 border-b border-slate-800 flex items-start justify-between bg-slate-950/40">
+      <div class="space-y-1 pr-4">
+        <div class="flex items-center gap-2">
+          <span id="drawer-phase-badge" class="px-2 py-0.5 text-xs font-mono rounded bg-slate-800 text-purple-300 border border-slate-700">
+            Phase 1
+          </span>
+          <span id="drawer-status-pill" class="px-2 py-0.5 text-xs font-mono rounded bg-emerald-500/10 text-emerald-400 border border-emerald-500/30">
+            Done
+          </span>
+        </div>
+        <h3 id="drawer-title" class="text-2xl font-bold text-white tracking-tight">C / C++</h3>
+      </div>
+      <button onclick="closeDrawer()" class="p-1.5 rounded-lg text-slate-400 hover:text-white hover:bg-slate-800 transition">
+        <i data-lucide="x" class="w-5 h-5"></i>
+      </button>
+    </div>
+
+    <!-- Drawer Body -->
+    <div class="p-6 space-y-6 flex-grow overflow-y-auto">
+      
+      <!-- Status Change Selector -->
+      <div class="space-y-2">
+        <label class="text-xs font-mono uppercase text-slate-400 tracking-wider">更新節點狀態</label>
+        <div class="grid grid-cols-3 gap-2">
+          <button onclick="setNodeStatus('done')" id="status-btn-done" class="px-3 py-2 rounded-lg text-xs font-mono font-medium border flex items-center justify-center gap-1.5 transition">
+            <span class="w-2 h-2 rounded-full bg-emerald-400"></span>
+            <span>已掌握</span>
+          </button>
+          <button onclick="setNodeStatus('in-progress')" id="status-btn-in-progress" class="px-3 py-2 rounded-lg text-xs font-mono font-medium border flex items-center justify-center gap-1.5 transition">
+            <span class="w-2 h-2 rounded-full bg-yellow-400"></span>
+            <span>進行中</span>
+          </button>
+          <button onclick="setNodeStatus('planned')" id="status-btn-planned" class="px-3 py-2 rounded-lg text-xs font-mono font-medium border flex items-center justify-center gap-1.5 transition">
+            <span class="w-2 h-2 rounded-full bg-slate-400"></span>
+            <span>規劃中</span>
+          </button>
+        </div>
+      </div>
+
+      <!-- Description -->
+      <div class="space-y-2">
+        <label class="text-xs font-mono uppercase text-slate-400 tracking-wider">技能核心概述</label>
+        <p id="drawer-desc" class="text-slate-300 text-sm leading-relaxed bg-slate-950/50 p-4 rounded-xl border border-slate-800/80">
+          -
+        </p>
+      </div>
+
+      <!-- Checklist / Topics -->
+      <div class="space-y-2">
+        <label class="text-xs font-mono uppercase text-slate-400 tracking-wider">關鍵技術與學習重點</label>
+        <ul id="drawer-topics" class="space-y-2 text-sm text-slate-300">
+          <!-- Populated by JS -->
+        </ul>
+      </div>
+
+      <!-- Recommendations / Resources -->
+      <div class="space-y-2">
+        <label class="text-xs font-mono uppercase text-slate-400 tracking-wider">官方推薦資源</label>
+        <div id="drawer-resources" class="space-y-2">
+          <!-- Populated by JS -->
+        </div>
+      </div>
+
+    </div>
+
+    <!-- Drawer Footer -->
+    <div class="p-4 border-t border-slate-800 bg-slate-950/40 flex justify-end">
+      <button onclick="closeDrawer()" class="px-4 py-2 rounded-lg bg-purple-600 hover:bg-purple-500 text-white font-medium text-xs font-mono transition">
+        完成關閉
+      </button>
+    </div>
+
+  </aside>
+
+  <!-- ================= EDIT PROFILE MODAL ================= -->
+  <div id="profile-modal" class="fixed inset-0 bg-black/70 backdrop-blur-sm z-50 flex items-center justify-center p-4 opacity-0 pointer-events-none transition-opacity duration-200">
+    <div class="bg-slate-900 border border-slate-800 rounded-2xl max-w-lg w-full p-6 shadow-2xl space-y-5">
+      
+      <div class="flex items-center justify-between border-b border-slate-800 pb-3">
+        <h3 class="text-lg font-bold text-white">編輯個人資訊</h3>
+        <button onclick="closeProfileModal()" class="text-slate-400 hover:text-white">
+          <i data-lucide="x" class="w-5 h-5"></i>
+        </button>
+      </div>
+
+      <div class="space-y-4 text-sm">
+        <div>
+          <label class="block text-xs font-mono text-slate-400 mb-1">姓名 (Display Name)</label>
+          <input id="input-name" type="text" class="w-full px-3 py-2 rounded-lg bg-slate-950 border border-slate-800 text-white focus:outline-none focus:border-purple-500 font-medium">
+        </div>
+
+        <div>
+          <label class="block text-xs font-mono text-slate-400 mb-1">專業職稱 (Title / Role)</label>
+          <input id="input-role" type="text" class="w-full px-3 py-2 rounded-lg bg-slate-950 border border-slate-800 text-white focus:outline-none focus:border-purple-500">
+        </div>
+
+        <div>
+          <label class="block text-xs font-mono text-slate-400 mb-1">工作狀態標籤 (Status)</label>
+          <input id="input-status" type="text" class="w-full px-3 py-2 rounded-lg bg-slate-950 border border-slate-800 text-white focus:outline-none focus:border-purple-500">
+        </div>
+
+        <div>
+          <label class="block text-xs font-mono text-slate-400 mb-1">個人自介 (Bio)</label>
+          <textarea id="input-bio" rows="3" class="w-full px-3 py-2 rounded-lg bg-slate-950 border border-slate-800 text-white focus:outline-none focus:border-purple-500 text-sm"></textarea>
+        </div>
+
+        <div>
+          <label class="block text-xs font-mono text-slate-400 mb-1">聯絡信箱 (Email)</label>
+          <input id="input-email" type="email" class="w-full px-3 py-2 rounded-lg bg-slate-950 border border-slate-800 text-white focus:outline-none focus:border-purple-500">
+        </div>
+      </div>
+
+      <div class="flex items-center justify-end gap-3 pt-3 border-t border-slate-800">
+        <button onclick="closeProfileModal()" class="px-4 py-2 rounded-lg bg-slate-800 hover:bg-slate-750 text-slate-300 font-mono text-xs transition">
+          取消
+        </button>
+        <button onclick="saveProfile()" class="px-4 py-2 rounded-lg bg-purple-600 hover:bg-purple-500 text-white font-mono text-xs font-medium transition">
+          儲存設定
+        </button>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ================= FOOTER ================= -->
+  <footer class="border-t border-slate-800/80 bg-slate-950 py-8">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs font-mono text-slate-500">
+      <div class="flex items-center gap-2">
+        <span>Inspired by</span>
+        <a href="https://roadmap.sh" target="_blank" class="text-purple-400 hover:underline">roadmap.sh</a>
+        <span>&bull;</span>
+        <span id="footer-name">白育誠</span>
+        <span>&copy; <span id="footer-year">2026</span></span>
+      </div>
+      <div class="flex items-center gap-4">
+        <span>Timezone: Asia/Taipei (UTC+8)</span>
+        <span>&bull;</span>
+        <button onclick="window.scrollTo({top: 0, behavior: 'smooth'})" class="hover:text-slate-300">Back to top &uarr;</button>
+      </div>
+    </div>
+  </footer>
+
+  <!-- ================= APPLICATION JAVASCRIPT ================= -->
+  <script>
+    // ----------------------------------------------------
+    // 1. DATA & STATE MANAGEMENT
+    // ----------------------------------------------------
+    const DEFAULT_PROFILE = {
+      name: "白育誠",
+      role: "Embedded & Software Engineer",
+      status: "Available for work",
+      bio: "專注於微控制器韌體設計、RTOS 多工系統架構、硬體通訊協議及物聯網邊緣運算。秉持簡潔、穩健且高可靠度的軟硬體整合工程思維。",
+      email: "yucheng.bai@example.com"
+    };
+
+    const ROADMAP_DATA = [
+      {
+        phase: 1,
+        title: "階段一：基礎核心 (Foundations)",
+        badge: "Core Engineering",
+        nodes: [
+          {
+            id: "c-cpp",
+            title: "C / C++ (C99 / C++17)",
+            defaultStatus: "done",
+            desc: "深入掌握 C/C++ 記憶體管理、指標位址操作、記憶體映射 I/O (MMIO)、Bitwise 操作與嵌入式專用優化策略。",
+            topics: ["Pointers & Memory Layout", "Volatile & Const Qualifiers", "Bit Manipulation & Bitfields", "Inline Assembly Basics"],
+            resources: [
+              { title: "Embedded C Coding Standard", url: "https://barrgroup.com" },
+              { title: "Modern C++ for Embedded", url: "https://isocpp.org" }
+            ]
+          },
+          {
+            id: "dsa",
+            title: "Data Structures & Algorithms",
+            defaultStatus: "done",
+            desc: "環形緩衝區 (Circular Buffer)、固定大小記憶體池 (Memory Pool)、優先級佇列與狀態機模式設計。",
+            topics: ["Ring Buffer / FIFO", "Memory Pool Allocation", "Finite State Machines (FSM)", "Binary Search & Bit Vectors"],
+            resources: [
+              { title: "Algorithms for Embedded Systems", url: "https://github.com" }
+            ]
+          },
+          {
+            id: "linux-git",
+            title: "Linux & Git VCS",
+            defaultStatus: "done",
+            desc: "熟悉 Linux Shell 命令列環境、GCC/Clang 工具鏈編譯腳本、Make/CMake 與 Git 分支協作流程。",
+            topics: ["Bash & Core Utilities", "GCC Cross-compilation", "Make / CMake Scripts", "Git Rebase & Branching"],
+            resources: [
+              { title: "Linux Command Line Primer", url: "https://roadmap.sh/linux" }
+            ]
+          }
+        ]
+      },
+      {
+        phase: 2,
+        title: "階段二：嵌入式硬體核心 (Embedded Core)",
+        badge: "Microcontroller & RTOS",
+        nodes: [
+          {
+            id: "arm-cortex",
+            title: "ARM Cortex-M Architecture",
+            defaultStatus: "done",
+            desc: "熟悉 Cortex-M0/M3/M4/M7 架構、中斷控制器 (NVIC)、中斷服務常式 (ISR) 優化、SysTick 與時鐘樹配置 (Clock Tree)。",
+            topics: ["NVIC Priority & Preemption", "SysTick & Boot Sequence", "Linker Scripts (.ld)", "Hardware Floating Point (FPU)"],
+            resources: [
+              { title: "ARM Cortex-M Programming Manual", url: "https://arm.com" }
+            ]
+          },
+          {
+            id: "freertos",
+            title: "FreeRTOS & Multitasking",
+            defaultStatus: "done",
+            desc: "任務優先權調度、信號量 (Semaphore)、互斥鎖 (Mutex)、佇列 (Queue) 與防止優先權倒置機制 (Priority Inversion)。",
+            topics: ["Task Scheduling & Ticks", "Queues & Message Buffers", "Semaphores & Mutexes", "Heap Management Schemes"],
+            resources: [
+              { title: "FreeRTOS Official Guide", url: "https://freertos.org" }
+            ]
+          },
+          {
+            id: "protocols",
+            title: "Bus Protocols (UART / SPI / I2C / CAN)",
+            defaultStatus: "done",
+            desc: "低層級周邊通訊協議驅動撰寫、DMA 零拷貝資料傳輸、邏輯分析儀波形除錯與封包校驗演算法 (CRC)。",
+            topics: ["UART with DMA & Idle Line", "SPI Master/Slave Full-Duplex", "I2C Multi-Master & Clock Stretching", "CAN-Bus Frame Decoding"],
+            resources: [
+              { title: "Serial Communication Handbooks", url: "https://roadmap.sh" }
+            ]
+          }
+        ]
+      },
+      {
+        phase: 3,
+        title: "階段三：進階韌體架構與通訊 (Advanced Firmware & IoT)",
+        badge: "IoT & Connectivity",
+        nodes: [
+          {
+            id: "firmware-arch",
+            title: "Firmware Architecture & HAL",
+            defaultStatus: "in-progress",
+            desc: "分層式硬體抽象層 (HAL) 與板級支援包 (BSP) 架構設計，實現模組化與高可重用性韌體。",
+            topics: ["Clean HAL / BSP Separation", "Event-Driven State Engine", "Watchdog Timer Safety", "Firmware Over-the-Air (OTA)"],
+            resources: [
+              { title: "Embedded Firmware Architecture", url: "https://barrgroup.com" }
+            ]
+          },
+          {
+            id: "iot-wireless",
+            title: "Wireless & IoT (BLE / Wi-Fi / MQTT)",
+            defaultStatus: "in-progress",
+            desc: "低功耗藍牙 (BLE GATT Services)、Wi-Fi 網路協定棧 (LwIP) 與 MQTT 輕量化感測器資料傳輸與雲端對接。",
+            topics: ["BLE Advertising & GATT Profiles", "LwIP TCP/IP Stack", "MQTT / TLS Encryption", "Low Power Sleep Modes"],
+            resources: [
+              { title: "Bluetooth Core Specification", url: "https://bluetooth.com" }
+            ]
+          },
+          {
+            id: "embedded-linux",
+            title: "Embedded Linux & Yocto",
+            defaultStatus: "in-progress",
+            desc: "U-Boot 開機載入器、Device Tree 硬體節點配置、嵌入式 Linux 核心編譯與 Yocto Project 自訂發行版建置。",
+            topics: ["U-Boot Bootloader Configuration", "Device Tree Source (.dts)", "RootFS Customization", "Kernel Driver Modules"],
+            resources: [
+              { title: "Bootlin Embedded Linux Training", url: "https://bootlin.com" }
+            ]
+          }
+        ]
+      },
+      {
+        phase: 4,
+        title: "階段四：前瞻技術探索 (Next Frontier)",
+        badge: "Future Ready",
+        nodes: [
+          {
+            id: "tinyml",
+            title: "TinyML / Edge AI Inference",
+            defaultStatus: "planned",
+            desc: "在微控制器 (MCU) 上部署輕量化類神經網路模型 (TensorFlow Lite for Microcontrollers)，實現終端邊緣推論與異音偵測。",
+            topics: ["Model Quantization (INT8)", "TFLite Micro Runtime", "Edge Impulse Audio / Vision", "Low-Latency DSP Optimization"],
+            resources: [
+              { title: "TensorFlow Lite for Microcontrollers", url: "https://tensorflow.org/lite/microcontrollers" }
+            ]
+          },
+          {
+            id: "rust-embedded",
+            title: "Rust for Embedded Systems",
+            defaultStatus: "planned",
+            desc: "探索無記憶體漏洞的安全韌體開發，運用 Rust 語言的生命週期與零成本抽象建構新一代嵌入式軟體。",
+            topics: ["no_std Environment", "Embedded HAL Crates", "Memory Safety Without Garbage Collection", "Concurrency & Panic Handlers"],
+            resources: [
+              { title: "The Embedded Rust Book", url: "https://docs.rust-embedded.org/book" }
+            ]
+          }
+        ]
+      }
+    ];
+
+    // Local Storage Keys
+    const LS_PROFILE_KEY = "byc_profile_data_v1";
+    const LS_NODE_STATUS_KEY = "byc_roadmap_nodes_v1";
+    const LS_CLOCK_MODE_KEY = "byc_clock_mode_v1"; // '24' or '12'
+
+    let currentProfile = {};
+    let currentNodeStatuses = {};
+    let is24HourMode = true;
+    let activeNodeId = null;
+
+    // ----------------------------------------------------
+    // 2. INITIALIZATION
+    // ----------------------------------------------------
+    function init() {
+      // Load Profile
+      const savedProfile = localStorage.getItem(LS_PROFILE_KEY);
+      currentProfile = savedProfile ? JSON.parse(savedProfile) : { ...DEFAULT_PROFILE };
+
+      // Load Node Statuses
+      const savedStatuses = localStorage.getItem(LS_NODE_STATUS_KEY);
+      if (savedStatuses) {
+        currentNodeStatuses = JSON.parse(savedStatuses);
+      } else {
+        ROADMAP_DATA.forEach(phase => {
+          phase.nodes.forEach(node => {
+            currentNodeStatuses[node.id] = node.defaultStatus;
+          });
+        });
+      }
+
+      // Load Clock Mode
+      const savedClockMode = localStorage.getItem(LS_CLOCK_MODE_KEY);
+      is24HourMode = savedClockMode !== '12';
+
+      // Render Everything
+      renderProfile();
+      renderRoadmap();
+      updateClockModeUI();
+      
+      // Start Live Clock
+      updateTime();
+      setInterval(updateTime, 1000);
+
+      // Render Lucide icons
+      lucide.createIcons();
+    }
+
+    // ----------------------------------------------------
+    // 3. PROFILE MANAGEMENT
+    // ----------------------------------------------------
+    function renderProfile() {
+      document.getElementById('profile-name').textContent = currentProfile.name;
+      document.getElementById('footer-name').textContent = currentProfile.name;
+      document.getElementById('profile-role').textContent = currentProfile.role;
+      document.getElementById('nav-title').textContent = currentProfile.role.split('&')[0].trim();
+      document.getElementById('profile-bio').textContent = currentProfile.bio;
+      document.getElementById('badge-status-text').textContent = currentProfile.status;
+      document.getElementById('nav-status-text').textContent = currentProfile.status.toUpperCase();
+      document.getElementById('profile-email-link').href = `mailto:${currentProfile.email}`;
+    }
+
+    function openProfileModal() {
+      document.getElementById('input-name').value = currentProfile.name;
+      document.getElementById('input-role').value = currentProfile.role;
+      document.getElementById('input-status').value = currentProfile.status;
+      document.getElementById('input-bio').value = currentProfile.bio;
+      document.getElementById('input-email').value = currentProfile.email;
+
+      const modal = document.getElementById('profile-modal');
+      modal.classList.remove('opacity-0', 'pointer-events-none');
+    }
+
+    function closeProfileModal() {
+      const modal = document.getElementById('profile-modal');
+      modal.classList.add('opacity-0', 'pointer-events-none');
+    }
+
+    function saveProfile() {
+      currentProfile.name = document.getElementById('input-name').value.trim() || DEFAULT_PROFILE.name;
+      currentProfile.role = document.getElementById('input-role').value.trim() || DEFAULT_PROFILE.role;
+      currentProfile.status = document.getElementById('input-status').value.trim() || DEFAULT_PROFILE.status;
+      currentProfile.bio = document.getElementById('input-bio').value.trim() || DEFAULT_PROFILE.bio;
+      currentProfile.email = document.getElementById('input-email').value.trim() || DEFAULT_PROFILE.email;
+
+      localStorage.setItem(LS_PROFILE_KEY, JSON.stringify(currentProfile));
+      renderProfile();
+      closeProfileModal();
+    }
+
+    function resetDefaults() {
+      if (confirm("確定要重設所有個人資料與節點狀態至預設值嗎？")) {
+        localStorage.removeItem(LS_PROFILE_KEY);
+        localStorage.removeItem(LS_NODE_STATUS_KEY);
+        localStorage.removeItem(LS_CLOCK_MODE_KEY);
+        currentProfile = { ...DEFAULT_PROFILE };
+        currentNodeStatuses = {};
+        ROADMAP_DATA.forEach(phase => {
+          phase.nodes.forEach(node => {
+            currentNodeStatuses[node.id] = node.defaultStatus;
+          });
+        });
+        is24HourMode = true;
+        renderProfile();
+        renderRoadmap();
+        updateClockModeUI();
+        lucide.createIcons();
+      }
+    }
+
+    // ----------------------------------------------------
+    // 4. LIVE CLOCK & PROGRESS BARS
+    // ----------------------------------------------------
+    function toggleClockMode() {
+      is24HourMode = !is24HourMode;
+      localStorage.setItem(LS_CLOCK_MODE_KEY, is24HourMode ? '24' : '12');
+      updateClockModeUI();
+      updateTime();
+    }
+
+    function updateClockModeUI() {
+      const label = document.getElementById('clock-mode-label');
+      label.textContent = is24HourMode ? '24H' : '12H';
+    }
+
+    function updateTime() {
+      const now = new Date();
+
+      // Hours, Minutes, Seconds
+      let hours = now.getHours();
+      const minutes = String(now.getMinutes()).padStart(2, '0');
+      const seconds = String(now.getSeconds()).padStart(2, '0');
+      let period = '';
+
+      if (!is24HourMode) {
+        period = hours >= 12 ? 'PM' : 'AM';
+        hours = hours % 12 || 12;
+      }
+      const hoursStr = String(hours).padStart(2, '0');
+
+      document.getElementById('clock-time').textContent = `${hoursStr}:${minutes}:${seconds}`;
+      document.getElementById('clock-period').textContent = period;
+
+      // Date Formatting
+      const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
+      const dateString = now.toLocaleDateString('zh-TW', options);
+      document.getElementById('clock-date').textContent = `${dateString}`;
+      document.getElementById('footer-year').textContent = now.getFullYear();
+      document.getElementById('year-label').textContent = `${now.getFullYear()} 年度進度 (Year Progress)`;
+
+      // Day Progress Calculation (0:00 to 24:00)
+      const secondsInDay = now.getHours() * 3600 + now.getMinutes() * 60 + now.getSeconds();
+      const dayPercent = ((secondsInDay / 86400) * 100).toFixed(1);
+      document.getElementById('day-progress-bar').style.width = `${dayPercent}%`;
+      document.getElementById('day-progress-text').textContent = `${dayPercent}%`;
+
+      // Year Progress Calculation
+      const startOfYear = new Date(now.getFullYear(), 0, 1);
+      const endOfYear = new Date(now.getFullYear() + 1, 0, 1);
+      const yearPercent = (((now - startOfYear) / (endOfYear - startOfYear)) * 100).toFixed(1);
+      document.getElementById('year-progress-bar').style.width = `${yearPercent}%`;
+      document.getElementById('year-progress-text').textContent = `${yearPercent}%`;
+    }
+
+    // ----------------------------------------------------
+    // 5. ROADMAP RENDERING & INTERACTION
+    // ----------------------------------------------------
+    function renderRoadmap() {
+      const container = document.getElementById('roadmap-container');
+      container.innerHTML = '';
+
+      ROADMAP_DATA.forEach((phase, phaseIndex) => {
+        const phaseDiv = document.createElement('div');
+        phaseDiv.className = 'space-y-4';
+
+        // Phase Header
+        phaseDiv.innerHTML = `
+          <div class="flex items-center gap-3">
+            <span class="px-2 py-0.5 text-xs font-mono rounded bg-slate-800 border border-slate-700 text-purple-300">Phase 0${phase.phase}</span>
+            <h3 class="text-base sm:text-lg font-bold text-white tracking-tight">${phase.title}</h3>
+            <span class="text-xs font-mono text-slate-500 hidden sm:inline">&bull; ${phase.badge}</span>
+          </div>
+        `;
+
+        // Nodes Grid
+        const grid = document.createElement('div');
+        grid.className = 'grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4';
+
+        phase.nodes.forEach(node => {
+          const status = currentNodeStatuses[node.id] || node.defaultStatus;
+          const nodeCard = createNodeCard(node, phase.phase, status);
+          grid.appendChild(nodeCard);
+        });
+
+        phaseDiv.appendChild(grid);
+        container.appendChild(phaseDiv);
+      });
+    }
+
+    function createNodeCard(node, phaseNum, status) {
+      const card = document.createElement('div');
+      card.onclick = () => openDrawer(node.id);
+
+      // Status-specific classes & styling
+      let statusBorder = 'border-slate-800 hover:border-slate-700 bg-slate-900/60';
+      let statusBadge = `<span class="inline-flex items-center gap-1 text-[11px] font-mono text-slate-400"><span class="w-1.5 h-1.5 rounded-full bg-slate-500"></span>規劃中</span>`;
+      let extraClass = '';
+
+      if (status === 'done') {
+        statusBorder = 'border-emerald-500/40 hover:border-emerald-400 bg-slate-900/80 shadow-sm';
+        statusBadge = `<span class="inline-flex items-center gap-1 text-[11px] font-mono text-emerald-400 font-medium"><span class="w-1.5 h-1.5 rounded-full bg-emerald-400"></span>已掌握</span>`;
+      } else if (status === 'in-progress') {
+        statusBorder = 'border-yellow-500/60 bg-slate-900/90 shadow-md';
+        statusBadge = `<span class="inline-flex items-center gap-1 text-[11px] font-mono text-yellow-300 font-medium"><span class="w-1.5 h-1.5 rounded-full bg-yellow-400 animate-pulse"></span>學習中</span>`;
+        extraClass = 'node-in-progress';
+      }
+
+      card.className = `group cursor-pointer rounded-xl border p-5 transition-all duration-200 hover:-translate-y-0.5 backdrop-blur flex flex-col justify-between ${statusBorder} ${extraClass}`;
+
+      card.innerHTML = `
+        <div class="space-y-2">
+          <div class="flex items-center justify-between">
+            <span class="text-[10px] font-mono text-slate-500 uppercase tracking-wider">NODE &bull; 0${phaseNum}</span>
+            ${statusBadge}
+          </div>
+          <h4 class="text-base font-bold text-white group-hover:text-purple-300 transition-colors">${node.title}</h4>
+          <p class="text-xs text-slate-400 leading-relaxed line-clamp-2">${node.desc}</p>
+        </div>
+        <div class="pt-4 mt-3 border-t border-slate-800/60 flex items-center justify-between text-xs font-mono text-slate-500 group-hover:text-purple-400 transition-colors">
+          <span>查看細節 & 資源</span>
+          <i data-lucide="chevron-right" class="w-3.5 h-3.5 group-hover:translate-x-0.5 transition-transform"></i>
+        </div>
+      `;
+
+      return card;
+    }
+
+    // ----------------------------------------------------
+    // 6. TOPIC DRAWER
+    // ----------------------------------------------------
+    function openDrawer(nodeId) {
+      activeNodeId = nodeId;
+      let foundNode = null;
+      let foundPhase = null;
+
+      for (const phase of ROADMAP_DATA) {
+        for (const node of phase.nodes) {
+          if (node.id === nodeId) {
+            foundNode = node;
+            foundPhase = phase;
+            break;
+          }
+        }
+        if (foundNode) break;
+      }
+
+      if (!foundNode) return;
+
+      const currentStatus = currentNodeStatuses[nodeId] || foundNode.defaultStatus;
+
+      // Fill Drawer details
+      document.getElementById('drawer-phase-badge').textContent = `Phase 0${foundPhase.phase}`;
+      document.getElementById('drawer-title').textContent = foundNode.title;
+      document.getElementById('drawer-desc').textContent = foundNode.desc;
+
+      updateDrawerStatusPill(currentStatus);
+      updateStatusButtonsUI(currentStatus);
+
+      // Topics list
+      const topicsUl = document.getElementById('drawer-topics');
+      topicsUl.innerHTML = '';
+      foundNode.topics.forEach(topic => {
+        const li = document.createElement('li');
+        li.className = 'flex items-center gap-2 text-xs font-mono p-2 rounded-lg bg-slate-950/60 border border-slate-800/80';
+        li.innerHTML = `<i data-lucide="check-circle-2" class="w-3.5 h-3.5 text-purple-400"></i><span>${topic}</span>`;
+        topicsUl.appendChild(li);
+      });
+
+      // Resources list
+      const resContainer = document.getElementById('drawer-resources');
+      resContainer.innerHTML = '';
+      foundNode.resources.forEach(res => {
+        const link = document.createElement('a');
+        link.href = res.url;
+        link.target = '_blank';
+        link.className = 'flex items-center justify-between p-2.5 rounded-lg bg-slate-950/60 border border-slate-800/80 text-xs font-mono text-slate-300 hover:text-white hover:border-purple-500/40 transition';
+        link.innerHTML = `
+          <div class="flex items-center gap-2">
+            <i data-lucide="book-open" class="w-3.5 h-3.5 text-purple-400"></i>
+            <span>${res.title}</span>
+          </div>
+          <i data-lucide="external-link" class="w-3 h-3 text-slate-500"></i>
+        `;
+        resContainer.appendChild(link);
+      });
+
+      // Show Backdrop & Slide in Drawer
+      const backdrop = document.getElementById('drawer-backdrop');
+      const drawer = document.getElementById('topic-drawer');
+
+      backdrop.classList.remove('opacity-0', 'pointer-events-none');
+      drawer.classList.remove('translate-x-full');
+
+      lucide.createIcons();
+    }
+
+    function closeDrawer() {
+      const backdrop = document.getElementById('drawer-backdrop');
+      const drawer = document.getElementById('topic-drawer');
+
+      backdrop.classList.add('opacity-0', 'pointer-events-none');
+      drawer.classList.add('translate-x-full');
+      activeNodeId = null;
+    }
+
+    function setNodeStatus(newStatus) {
+      if (!activeNodeId) return;
+
+      currentNodeStatuses[activeNodeId] = newStatus;
+      localStorage.setItem(LS_NODE_STATUS_KEY, JSON.stringify(currentNodeStatuses));
+
+      updateDrawerStatusPill(newStatus);
+      updateStatusButtonsUI(newStatus);
+      renderRoadmap();
+      lucide.createIcons();
+    }
+
+    function updateDrawerStatusPill(status) {
+      const pill = document.getElementById('drawer-status-pill');
+      if (status === 'done') {
+        pill.className = 'px-2 py-0.5 text-xs font-mono rounded bg-emerald-500/10 text-emerald-400 border border-emerald-500/30';
+        pill.textContent = '已掌握 (Done)';
+      } else if (status === 'in-progress') {
+        pill.className = 'px-2 py-0.5 text-xs font-mono rounded bg-yellow-500/10 text-yellow-300 border border-yellow-500/30';
+        pill.textContent = '進行中 (In Progress)';
+      } else {
+        pill.className = 'px-2 py-0.5 text-xs font-mono rounded bg-slate-800 text-slate-400 border border-slate-700';
+        pill.textContent = '規劃中 (Planned)';
+      }
+    }
+
+    function updateStatusButtonsUI(status) {
+      const btnDone = document.getElementById('status-btn-done');
+      const btnInProg = document.getElementById('status-btn-in-progress');
+      const btnPlan = document.getElementById('status-btn-planned');
+
+      const activeClass = 'bg-slate-800 border-purple-500 text-white shadow-sm';
+      const inactiveClass = 'bg-slate-950/60 border-slate-800 text-slate-400 hover:text-slate-200 hover:border-slate-700';
+
+      btnDone.className = `px-3 py-2 rounded-lg text-xs font-mono font-medium border flex items-center justify-center gap-1.5 transition ${status === 'done' ? activeClass : inactiveClass}`;
+      btnInProg.className = `px-3 py-2 rounded-lg text-xs font-mono font-medium border flex items-center justify-center gap-1.5 transition ${status === 'in-progress' ? activeClass : inactiveClass}`;
+      btnPlan.className = `px-3 py-2 rounded-lg text-xs font-mono font-medium border flex items-center justify-center gap-1.5 transition ${status === 'planned' ? activeClass : inactiveClass}`;
+    }
+
+    // Keyboard ESC to close modal/drawer
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape') {
+        closeDrawer();
+        closeProfileModal();
+      }
+    });
+
+    // Run on startup
+    window.addEventListener('DOMContentLoaded', init);
+  </script>
+</body>
+</html>
