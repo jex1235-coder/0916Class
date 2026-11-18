@@ -41,10 +41,9 @@
 - 節點狀態與時鐘偏好會透過瀏覽器 `localStorage` 自動保存，重新整理不遺失。
 
 ### 4. 🗺️ 個人技能路線圖 (Personal Skills Roadmap)
-- **Phase 01 實務核心與語言文書**：`電腦組裝與設備裝配檢修`、`網路架設佈線與設備設定`、`日英雙語能力與技術文書排版（JLPT N1 / TOEIC 800）`
+- **Phase 01 實務核心與語言文書**：`各式設備組裝與裝配檢修`、`網路架設佈線與設備設定`、`日英雙語能力與技術文書排版（JLPT N1 / TOEIC 800）`
 - **Phase 02 專業認證與微控制器實作**：`iPAS 機器人工程師（中階）`、`Arduino & ESP32 開發應用`
 - **Phase 03 程式與開發工具基礎**：`C 語言 / Python / Linux & Git（學無止盡）`
-- **Phase 04 未來進修探索**：`Data Structures & Algorithms`、`硬體通訊協定 (UART / SPI / I2C / CAN)`、`進階韌體與系統 (Cortex-M / RTOS / Embedded Linux)`
 - **側邊滑出抽屜 (Slide-over Drawer)**：點擊任一節點可展開詳細學習大綱，並可自訂切換該節點掌握狀態（已掌握 / 進行中 / 規劃中）。
 
 ### 5. ⚡ 零建置依賴 (Zero-Build)
