@@ -6,7 +6,7 @@
   <title>白育誠 | 產品工程師 (Product Engineer) - Personal Roadmap & Dashboard</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Chakra+Petch:wght@600;700&family=JetBrains+Mono:wght@400;500;600;700&family=Noto+Sans+TC:wght@400;500;700;900&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet">
   <!-- Tailwind CSS CDN -->
   <script src="https://cdn.tailwindcss.com"></script>
   <!-- Lucide Icons -->
@@ -17,8 +17,9 @@
       theme: {
         extend: {
           fontFamily: {
-            sans: ['Inter', 'system-ui', 'sans-serif'],
-            mono: ['JetBrains Mono', 'monospace'],
+            sans: ['Space Grotesk', 'Noto Sans TC', 'system-ui', 'sans-serif'],
+            mono: ['JetBrains Mono', 'Noto Sans TC', 'monospace'],
+            display: ['Chakra Petch', 'Space Grotesk', 'Noto Sans TC', 'sans-serif'],
           },
           colors: {
             slate: {
@@ -105,22 +106,12 @@
         <span id="nav-status-text" class="text-emerald-400 font-medium">PRODUCT ENGINEER</span>
       </div>
 
-      <!-- Actions (Time format, Theme toggle, Edit Profile) -->
+      <!-- Actions (Time format) -->
       <div class="flex items-center gap-2.5">
         <!-- 12h/24h toggle -->
         <button id="clock-mode-btn" onclick="toggleClockMode()" title="切換 12/24 小時制" class="flex items-center gap-1 px-2.5 py-1 text-xs font-mono rounded-lg bg-slate-900 border border-slate-800 hover:border-slate-700 text-slate-300 hover:text-white transition">
           <i data-lucide="clock" class="w-3.5 h-3.5 text-purple-400"></i>
           <span id="clock-mode-label">24H</span>
-        </button>
-
-        <!-- Edit Profile Trigger -->
-        <button onclick="openProfileModal()" title="編輯個人資訊" class="p-2 rounded-lg bg-slate-900 border border-slate-800 hover:border-purple-500/50 hover:bg-slate-850 text-slate-300 hover:text-purple-300 transition">
-          <i data-lucide="user-cog" class="w-4 h-4"></i>
-        </button>
-
-        <!-- Reset Defaults -->
-        <button onclick="resetDefaults()" title="重設為預設值" class="hidden sm:block p-2 rounded-lg bg-slate-900 border border-slate-800 hover:border-slate-700 text-slate-400 hover:text-slate-200 transition">
-          <i data-lucide="rotate-ccw" class="w-4 h-4"></i>
         </button>
       </div>
 
@@ -152,17 +143,13 @@
                   <span id="badge-status-text">在職中 · 持續進修</span>
                 </span>
               </div>
-              <button onclick="openProfileModal()" class="text-xs font-mono text-slate-400 hover:text-purple-300 flex items-center gap-1 transition">
-                <i data-lucide="edit-3" class="w-3.5 h-3.5"></i>
-                <span>編輯資料</span>
-              </button>
             </div>
 
             <!-- Name & Title -->
             <div class="space-y-1 pt-1">
               <div class="flex items-baseline gap-3">
-                <h1 id="profile-name" class="text-3xl sm:text-4xl lg:text-5xl font-extrabold tracking-tight text-white">白育誠</h1>
-                <span class="text-slate-400 text-sm font-mono">(Yu-Cheng Bai)</span>
+                <h1 id="profile-name" class="text-3xl sm:text-4xl lg:text-5xl font-black tracking-wide text-white">白育誠</h1>
+                <span class="text-slate-400 text-sm font-display tracking-wider">(Yu-Cheng Bai)</span>
               </div>
               <p id="profile-role" class="text-lg sm:text-xl font-medium text-purple-400">產品工程師 (Product Engineer)</p>
             </div>
@@ -214,7 +201,7 @@
 
             <!-- Digital Clock Display (Large) -->
             <div class="py-2">
-              <div class="flex items-baseline font-mono font-bold tracking-tight text-white select-none">
+              <div class="flex items-baseline font-display font-bold tracking-wider text-white select-none">
                 <span id="clock-time" class="text-4xl sm:text-5xl lg:text-6xl text-transparent bg-clip-text bg-gradient-to-r from-white via-slate-100 to-purple-200">
                   00:00:00
                 </span>
@@ -393,7 +380,7 @@
       </div>
 
       <!-- Checklist / Topics -->
-      <div class="space-y-2">
+      <div id="drawer-topics-section" class="space-y-2">
         <label class="text-xs font-mono uppercase text-slate-400 tracking-wider">關鍵技術與學習重點</label>
         <ul id="drawer-topics" class="space-y-2 text-sm text-slate-300">
           <!-- Populated by JS -->
@@ -418,56 +405,6 @@
     </div>
 
   </aside>
-
-  <!-- ================= EDIT PROFILE MODAL ================= -->
-  <div id="profile-modal" class="fixed inset-0 bg-black/70 backdrop-blur-sm z-50 flex items-center justify-center p-4 opacity-0 pointer-events-none transition-opacity duration-200">
-    <div class="bg-slate-900 border border-slate-800 rounded-2xl max-w-lg w-full p-6 shadow-2xl space-y-5">
-      
-      <div class="flex items-center justify-between border-b border-slate-800 pb-3">
-        <h3 class="text-lg font-bold text-white">編輯個人資訊</h3>
-        <button onclick="closeProfileModal()" class="text-slate-400 hover:text-white">
-          <i data-lucide="x" class="w-5 h-5"></i>
-        </button>
-      </div>
-
-      <div class="space-y-4 text-sm">
-        <div>
-          <label class="block text-xs font-mono text-slate-400 mb-1">姓名 (Display Name)</label>
-          <input id="input-name" type="text" class="w-full px-3 py-2 rounded-lg bg-slate-950 border border-slate-800 text-white focus:outline-none focus:border-purple-500 font-medium">
-        </div>
-
-        <div>
-          <label class="block text-xs font-mono text-slate-400 mb-1">專業職稱 (Title / Role)</label>
-          <input id="input-role" type="text" class="w-full px-3 py-2 rounded-lg bg-slate-950 border border-slate-800 text-white focus:outline-none focus:border-purple-500">
-        </div>
-
-        <div>
-          <label class="block text-xs font-mono text-slate-400 mb-1">工作狀態標籤 (Status)</label>
-          <input id="input-status" type="text" class="w-full px-3 py-2 rounded-lg bg-slate-950 border border-slate-800 text-white focus:outline-none focus:border-purple-500">
-        </div>
-
-        <div>
-          <label class="block text-xs font-mono text-slate-400 mb-1">個人自介 (Bio)</label>
-          <textarea id="input-bio" rows="3" class="w-full px-3 py-2 rounded-lg bg-slate-950 border border-slate-800 text-white focus:outline-none focus:border-purple-500 text-sm"></textarea>
-        </div>
-
-        <div>
-          <label class="block text-xs font-mono text-slate-400 mb-1">聯絡信箱 (Email)</label>
-          <input id="input-email" type="email" class="w-full px-3 py-2 rounded-lg bg-slate-950 border border-slate-800 text-white focus:outline-none focus:border-purple-500">
-        </div>
-      </div>
-
-      <div class="flex items-center justify-end gap-3 pt-3 border-t border-slate-800">
-        <button onclick="closeProfileModal()" class="px-4 py-2 rounded-lg bg-slate-800 hover:bg-slate-750 text-slate-300 font-mono text-xs transition">
-          取消
-        </button>
-        <button onclick="saveProfile()" class="px-4 py-2 rounded-lg bg-purple-600 hover:bg-purple-500 text-white font-mono text-xs font-medium transition">
-          儲存設定
-        </button>
-      </div>
-
-    </div>
-  </div>
 
   <!-- ================= FOOTER ================= -->
   <footer class="border-t border-slate-800/80 bg-slate-950 py-8">
@@ -513,11 +450,7 @@
             iconTheme: "emerald",
             defaultStatus: "done",
             topics: [
-              "電腦組裝與硬體零組件裝配",
-              "電腦設備裝配與系統建置",
-              "資訊設備操作檢修與異常排查",
-              "資訊設備環境設定",
-              "作業系統基本操作（Windows 10）"
+              "各式設備組裝"
             ],
             resources: [
               { title: "Windows 支援與系統管理文件", url: "https://support.microsoft.com/zh-tw/windows" }
@@ -607,12 +540,7 @@
             iconTheme: "purple",
             hideStatus: true,
             defaultStatus: "none",
-            topics: [
-              "C 語言：基本語法、流程控制、指標概念",
-              "Python：基礎語法與簡易自動化／數據腳本",
-              "Linux & Git：常用 CLI 操作與基本版本控制",
-              "持續透過小型專案與日常實作累積熟練度"
-            ],
+            topics: [],
             resources: [
               { title: "cppreference C Language Reference", url: "https://en.cppreference.com/w/c" },
               { title: "Python Official Tutorial", url: "https://docs.python.org/zh-tw/3/tutorial/" },
@@ -624,7 +552,7 @@
       },
       {
         phase: 4,
-        title: "階段四：未來進修探索 (Future Roadmap · 尚未熟悉)",
+        title: "階段四：未來進修探索",
         badge: "Planned / Not Yet Learned",
         nodes: [
           {
@@ -676,12 +604,11 @@
       }
     ];
 
-    // Local Storage Keys (bumped so stale cache does not override updated profile/skills)
-    const LS_PROFILE_KEY = "byc_profile_data_v2";
+    // Local Storage Keys
     const LS_NODE_STATUS_KEY = "byc_roadmap_nodes_v3";
     const LS_CLOCK_MODE_KEY = "byc_clock_mode_v1"; // '24' or '12'
 
-    let currentProfile = {};
+    let currentProfile = { ...DEFAULT_PROFILE };
     let currentNodeStatuses = {};
     let is24HourMode = true;
     let activeNodeId = null;
@@ -700,9 +627,7 @@
     // 2. INITIALIZATION
     // ----------------------------------------------------
     function init() {
-      // Load Profile
-      const savedProfile = safeParseJSON(localStorage.getItem(LS_PROFILE_KEY), null);
-      currentProfile = savedProfile ? { ...DEFAULT_PROFILE, ...savedProfile } : { ...DEFAULT_PROFILE };
+      currentProfile = { ...DEFAULT_PROFILE };
 
       // Load Node Statuses (fill any missing nodes with defaults)
       const savedStatuses = safeParseJSON(localStorage.getItem(LS_NODE_STATUS_KEY), {});
@@ -743,54 +668,6 @@
       document.getElementById('badge-status-text').textContent = currentProfile.status;
       document.getElementById('nav-status-text').textContent = currentProfile.status.toUpperCase();
       document.getElementById('profile-email-link').href = `mailto:${currentProfile.email}`;
-    }
-
-    function openProfileModal() {
-      document.getElementById('input-name').value = currentProfile.name;
-      document.getElementById('input-role').value = currentProfile.role;
-      document.getElementById('input-status').value = currentProfile.status;
-      document.getElementById('input-bio').value = currentProfile.bio;
-      document.getElementById('input-email').value = currentProfile.email;
-
-      const modal = document.getElementById('profile-modal');
-      modal.classList.remove('opacity-0', 'pointer-events-none');
-    }
-
-    function closeProfileModal() {
-      const modal = document.getElementById('profile-modal');
-      modal.classList.add('opacity-0', 'pointer-events-none');
-    }
-
-    function saveProfile() {
-      currentProfile.name = document.getElementById('input-name').value.trim() || DEFAULT_PROFILE.name;
-      currentProfile.role = document.getElementById('input-role').value.trim() || DEFAULT_PROFILE.role;
-      currentProfile.status = document.getElementById('input-status').value.trim() || DEFAULT_PROFILE.status;
-      currentProfile.bio = document.getElementById('input-bio').value.trim() || DEFAULT_PROFILE.bio;
-      currentProfile.email = document.getElementById('input-email').value.trim() || DEFAULT_PROFILE.email;
-
-      localStorage.setItem(LS_PROFILE_KEY, JSON.stringify(currentProfile));
-      renderProfile();
-      closeProfileModal();
-    }
-
-    function resetDefaults() {
-      if (confirm("確定要重設所有個人資料與節點狀態至預設值嗎？")) {
-        localStorage.removeItem(LS_PROFILE_KEY);
-        localStorage.removeItem(LS_NODE_STATUS_KEY);
-        localStorage.removeItem(LS_CLOCK_MODE_KEY);
-        currentProfile = { ...DEFAULT_PROFILE };
-        currentNodeStatuses = {};
-        ROADMAP_DATA.forEach(phase => {
-          phase.nodes.forEach(node => {
-            currentNodeStatuses[node.id] = node.defaultStatus;
-          });
-        });
-        is24HourMode = true;
-        renderProfile();
-        renderRoadmap();
-        updateClockModeUI();
-        lucide.createIcons();
-      }
     }
 
     // ----------------------------------------------------
@@ -991,14 +868,20 @@
       }
 
       // Topics list
+      const topicsSection = document.getElementById('drawer-topics-section');
       const topicsUl = document.getElementById('drawer-topics');
       topicsUl.innerHTML = '';
-      foundNode.topics.forEach(topic => {
-        const li = document.createElement('li');
-        li.className = 'flex items-center gap-2 text-xs font-mono p-2 rounded-lg bg-slate-950/60 border border-slate-800/80';
-        li.innerHTML = `<i data-lucide="check-circle-2" class="w-3.5 h-3.5 text-purple-400"></i><span>${topic}</span>`;
-        topicsUl.appendChild(li);
-      });
+      if (foundNode.topics && foundNode.topics.length > 0) {
+        topicsSection.classList.remove('hidden');
+        foundNode.topics.forEach(topic => {
+          const li = document.createElement('li');
+          li.className = 'flex items-center gap-2 text-xs font-mono p-2 rounded-lg bg-slate-950/60 border border-slate-800/80';
+          li.innerHTML = `<i data-lucide="check-circle-2" class="w-3.5 h-3.5 text-purple-400"></i><span>${topic}</span>`;
+          topicsUl.appendChild(li);
+        });
+      } else {
+        topicsSection.classList.add('hidden');
+      }
 
       // Resources list
       const resContainer = document.getElementById('drawer-resources');
@@ -1076,11 +959,10 @@
       btnPlan.className = `px-3 py-2 rounded-lg text-xs font-mono font-medium border flex items-center justify-center gap-1.5 transition ${status === 'planned' ? activeClass : inactiveClass}`;
     }
 
-    // Keyboard ESC to close modal/drawer
+    // Keyboard ESC to close drawer
     document.addEventListener('keydown', (e) => {
       if (e.key === 'Escape') {
         closeDrawer();
-        closeProfileModal();
       }
     });
 

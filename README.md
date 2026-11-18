@@ -36,16 +36,15 @@
 - **今日時間進度條 (Day Progress)**：動態計算今日 24 小時內已度過的百分比。
 - **年度進度條 (Year Progress)**：即時追蹤本年度已過天數之百分比。
 
-### 3. 👤 個人資訊、證照與即時儲存 (Identity & Credentials)
+### 3. 👤 個人資訊與證照展示 (Identity & Credentials)
 - 預設顯示：**白育誠**（`產品工程師 (Product Engineer)`），並展示 **JLPT N1**、**TOEIC 800**、**iPAS 機器人工程師（中階）** 等核心認證。
-- 支援右上角點擊「編輯資料」，可直接修改姓名、職稱、狀態標籤與個人自介。
-- **瀏覽器本機快取**：修改後的內容自動保存至 `localStorage`，重新整理不遺失。
+- 節點狀態與時鐘偏好會透過瀏覽器 `localStorage` 自動保存，重新整理不遺失。
 
 ### 4. 🗺️ 個人技能路線圖 (Personal Skills Roadmap)
 - **Phase 01 實務核心與語言文書**：`電腦組裝與設備裝配檢修`、`網路架設佈線與設備設定`、`日英雙語能力與技術文書排版（JLPT N1 / TOEIC 800）`
 - **Phase 02 專業認證與微控制器實作**：`iPAS 機器人工程師（中階）`、`Arduino & ESP32 開發應用`
 - **Phase 03 程式與開發工具基礎**：`C 語言 / Python / Linux & Git（學無止盡）`
-- **Phase 04 未來進修探索（尚未熟悉）**：`Data Structures & Algorithms`、`硬體通訊協定 (UART / SPI / I2C / CAN)`、`進階韌體與系統 (Cortex-M / RTOS / Embedded Linux)`
+- **Phase 04 未來進修探索**：`Data Structures & Algorithms`、`硬體通訊協定 (UART / SPI / I2C / CAN)`、`進階韌體與系統 (Cortex-M / RTOS / Embedded Linux)`
 - **側邊滑出抽屜 (Slide-over Drawer)**：點擊任一節點可展開詳細學習大綱，並可自訂切換該節點掌握狀態（已掌握 / 進行中 / 規劃中）。
 
 ### 5. ⚡ 零建置依賴 (Zero-Build)
