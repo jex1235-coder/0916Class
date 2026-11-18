@@ -44,7 +44,7 @@
 ### 4. 🗺️ 個人技能路線圖 (Personal Skills Roadmap)
 - **Phase 01 實務核心與語言文書**：`電腦組裝與設備裝配檢修`、`網路架設佈線與設備設定`、`日英雙語能力與技術文書排版（JLPT N1 / TOEIC 800）`
 - **Phase 02 專業認證與微控制器實作**：`iPAS 機器人工程師（中階）`、`Arduino & ESP32 開發應用`
-- **Phase 03 程式與開發工具基礎（學習中）**：`C 語言（學無止盡）`、`Python（學無止盡）`、`Linux & Git 版本控制（初學）`
+- **Phase 03 程式與開發工具基礎**：`C 語言 / Python / Linux & Git（學無止盡）`
 - **Phase 04 未來進修探索（尚未熟悉）**：`Data Structures & Algorithms`、`硬體通訊協定 (UART / SPI / I2C / CAN)`、`進階韌體與系統 (Cortex-M / RTOS / Embedded Linux)`
 - **側邊滑出抽屜 (Slide-over Drawer)**：點擊任一節點可展開詳細學習大綱，並可自訂切換該節點掌握狀態（已掌握 / 進行中 / 規劃中）。
 

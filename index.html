@@ -322,10 +322,6 @@
               <span class="w-2 h-2 rounded-full bg-emerald-400"></span>
               <span>已掌握 (Done)</span>
             </span>
-            <span class="inline-flex items-center gap-1 px-2.5 py-1 rounded bg-yellow-500/10 border border-yellow-500/30 text-yellow-300">
-              <span class="w-2 h-2 rounded-full bg-yellow-400"></span>
-              <span>深造中 (In Progress)</span>
-            </span>
             <span class="inline-flex items-center gap-1 px-2.5 py-1 rounded bg-slate-800 border border-slate-700 text-slate-300">
               <span class="w-2 h-2 rounded-full bg-slate-500"></span>
               <span>未來規劃 (Planned)</span>
@@ -370,7 +366,7 @@
     <div class="p-6 space-y-6 flex-grow overflow-y-auto">
       
       <!-- Status Change Selector -->
-      <div class="space-y-2">
+      <div id="drawer-status-section" class="space-y-2">
         <label class="text-xs font-mono uppercase text-slate-400 tracking-wider">更新節點狀態</label>
         <div class="grid grid-cols-3 gap-2">
           <button onclick="setNodeStatus('done')" id="status-btn-done" class="px-3 py-2 rounded-lg text-xs font-mono font-medium border flex items-center justify-center gap-1.5 transition">
@@ -597,47 +593,23 @@
       {
         phase: 3,
         title: "階段三：程式與開發工具基礎 (Programming & Tooling)",
-        badge: "Foundation Building",
+        badge: "Lifelong Learning",
         nodes: [
           {
-            id: "c-basic",
-            title: "C 語言（學無止盡）",
-            defaultStatus: "in-progress",
-            desc: "目前具備 C 語言基礎語法認識（僅會一點），主要搭配 Arduino 實作；指標運用、記憶體配置與進階系統開發仍在逐步累積中。",
+            id: "programming-tooling",
+            title: "C 語言 / Python / Linux & Git（學無止盡）",
+            hideStatus: true,
+            defaultStatus: "none",
+            desc: "目前皆處於基礎與初學累積階段（C 與 Python 僅會一點、Linux 與 Git 剛入門），保持學無止盡的心態持續練習與實作。",
             topics: [
-              "基本語法、變數與流程控制",
-              "函式與基本陣列操作",
-              "指標與記憶體概念（學習中）"
+              "C 語言：基本語法、流程控制、指標概念",
+              "Python：基礎語法與簡易自動化／數據腳本",
+              "Linux & Git：常用 CLI 操作與基本版本控制",
+              "持續透過小型專案與日常實作累積熟練度"
             ],
             resources: [
-              { title: "cppreference C Language Reference", url: "https://en.cppreference.com/w/c" }
-            ]
-          },
-          {
-            id: "python-basic",
-            title: "Python（學無止盡）",
-            defaultStatus: "in-progress",
-            desc: "目前僅會一點 Python 基礎語法與簡單腳本撰寫，持續練習檔案處理、基礎資料分析與日常工作輔助自動化。",
-            topics: [
-              "基礎語法與資料結構（List / Dict）",
-              "簡易自動化與數據處理腳本",
-              "常用標準函式庫練習（學習中）"
-            ],
-            resources: [
-              { title: "Python Official Tutorial", url: "https://docs.python.org/zh-tw/3/tutorial/" }
-            ]
-          },
-          {
-            id: "linux-git",
-            title: "Linux & Git 版本控制（初學）",
-            defaultStatus: "in-progress",
-            desc: "目前為初學階段，正在練習 Linux 終端機基本操作，以及 Git 基礎版本追蹤（add / commit / push）與 GitHub 協作流程。",
-            topics: [
-              "Linux 基礎指令與目錄操作（初學）",
-              "Git 版本控制基礎操作（初學）",
-              "GitHub 專案託管與頁面維護"
-            ],
-            resources: [
+              { title: "cppreference C Language Reference", url: "https://en.cppreference.com/w/c" },
+              { title: "Python Official Tutorial", url: "https://docs.python.org/zh-tw/3/tutorial/" },
               { title: "Pro Git 中文版", url: "https://git-scm.com/book/zh-tw/v2" },
               { title: "Linux Roadmap (roadmap.sh)", url: "https://roadmap.sh/linux" }
             ]
@@ -695,9 +667,9 @@
       }
     ];
 
-    // Local Storage Keys (bumped to v2 so stale v1 cache does not override updated profile/skills)
+    // Local Storage Keys (bumped so stale cache does not override updated profile/skills)
     const LS_PROFILE_KEY = "byc_profile_data_v2";
-    const LS_NODE_STATUS_KEY = "byc_roadmap_nodes_v2";
+    const LS_NODE_STATUS_KEY = "byc_roadmap_nodes_v3";
     const LS_CLOCK_MODE_KEY = "byc_clock_mode_v1"; // '24' or '12'
 
     let currentProfile = {};
@@ -889,10 +861,11 @@
         // Nodes Grid
         const grid = document.createElement('div');
         grid.className = 'grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4';
+        const isSingleInPhase = phase.nodes.length === 1;
 
         phase.nodes.forEach(node => {
           const status = currentNodeStatuses[node.id] || node.defaultStatus;
-          const nodeCard = createNodeCard(node, phase.phase, status);
+          const nodeCard = createNodeCard(node, phase.phase, status, isSingleInPhase);
           grid.appendChild(nodeCard);
         });
 
@@ -901,22 +874,25 @@
       });
     }
 
-    function createNodeCard(node, phaseNum, status) {
+    function createNodeCard(node, phaseNum, status, isSingleInPhase = false) {
       const card = document.createElement('div');
       card.onclick = () => openDrawer(node.id);
 
       // Status-specific classes & styling
       let statusBorder = 'border-slate-800 hover:border-slate-700 bg-slate-900/60';
       let statusBadge = `<span class="inline-flex items-center gap-1 text-[11px] font-mono text-slate-400"><span class="w-1.5 h-1.5 rounded-full bg-slate-500"></span>規劃中</span>`;
-      let extraClass = '';
+      let extraClass = isSingleInPhase ? 'md:col-span-2 lg:col-span-3' : '';
 
-      if (status === 'done') {
+      if (node.hideStatus) {
+        statusBorder = 'border-purple-500/35 hover:border-purple-400/70 bg-slate-900/80 shadow-sm';
+        statusBadge = '';
+      } else if (status === 'done') {
         statusBorder = 'border-emerald-500/40 hover:border-emerald-400 bg-slate-900/80 shadow-sm';
         statusBadge = `<span class="inline-flex items-center gap-1 text-[11px] font-mono text-emerald-400 font-medium"><span class="w-1.5 h-1.5 rounded-full bg-emerald-400"></span>已掌握</span>`;
       } else if (status === 'in-progress') {
         statusBorder = 'border-yellow-500/60 bg-slate-900/90 shadow-md';
         statusBadge = `<span class="inline-flex items-center gap-1 text-[11px] font-mono text-yellow-300 font-medium"><span class="w-1.5 h-1.5 rounded-full bg-yellow-400 animate-pulse"></span>學習中</span>`;
-        extraClass = 'node-in-progress';
+        extraClass = `${extraClass} node-in-progress`.trim();
       }
 
       card.className = `group cursor-pointer rounded-xl border p-5 transition-all duration-200 hover:-translate-y-0.5 backdrop-blur flex flex-col justify-between ${statusBorder} ${extraClass}`;
@@ -967,8 +943,17 @@
       document.getElementById('drawer-title').textContent = foundNode.title;
       document.getElementById('drawer-desc').textContent = foundNode.desc;
 
-      updateDrawerStatusPill(currentStatus);
-      updateStatusButtonsUI(currentStatus);
+      const statusPill = document.getElementById('drawer-status-pill');
+      const statusSection = document.getElementById('drawer-status-section');
+      if (foundNode.hideStatus) {
+        statusPill.classList.add('hidden');
+        statusSection.classList.add('hidden');
+      } else {
+        statusPill.classList.remove('hidden');
+        statusSection.classList.remove('hidden');
+        updateDrawerStatusPill(currentStatus);
+        updateStatusButtonsUI(currentStatus);
+      }
 
       // Topics list
       const topicsUl = document.getElementById('drawer-topics');
