@@ -182,7 +182,7 @@
               <span class="px-2.5 py-1 text-xs font-mono rounded bg-slate-800/80 border border-slate-700/50 text-slate-300">iPAS 機器人工程師(中階)</span>
               <span class="px-2.5 py-1 text-xs font-mono rounded bg-slate-800/80 border border-slate-700/50 text-slate-300">設備裝配 &amp; 網路佈線</span>
               <span class="px-2.5 py-1 text-xs font-mono rounded bg-slate-800/80 border border-slate-700/50 text-slate-300">Arduino / ESP32</span>
-              <span class="px-2.5 py-1 text-xs font-mono rounded bg-slate-800/80 border border-slate-700/50 text-slate-300">Python / C (基礎)</span>
+              <span class="px-2.5 py-1 text-xs font-mono rounded bg-slate-800/80 border border-slate-700/50 text-slate-300">Python / C</span>
             </div>
 
             <div class="flex items-center gap-3">
@@ -385,7 +385,7 @@
       </div>
 
       <!-- Description -->
-      <div class="space-y-2">
+      <div id="drawer-desc-section" class="space-y-2">
         <label class="text-xs font-mono uppercase text-slate-400 tracking-wider">技能核心概述</label>
         <p id="drawer-desc" class="text-slate-300 text-sm leading-relaxed bg-slate-950/50 p-4 rounded-xl border border-slate-800/80">
           -
@@ -509,8 +509,9 @@
           {
             id: "hardware-assembly",
             title: "電腦組裝與設備裝配檢修",
+            icon: "monitor",
+            iconTheme: "emerald",
             defaultStatus: "done",
-            desc: "具備電腦組裝、電腦設備裝配、資訊設備操作檢修與資訊設備環境設定等實務能力，熟悉 Windows 10 作業系統基本操作與日常異常排除。",
             topics: [
               "電腦組裝與硬體零組件裝配",
               "電腦設備裝配與系統建置",
@@ -525,8 +526,9 @@
           {
             id: "network-cabling",
             title: "網路架設佈線與設備設定",
+            icon: "network",
+            iconTheme: "blue",
             defaultStatus: "done",
-            desc: "具備實體網路架設佈線與網路設備設定安裝實務經驗，能完成基礎區域網路部署、連線檢測與辦公／機台環境網路配置。",
             topics: [
               "網路架設與實體線材佈線",
               "網路設備設定安裝（Router / Switch）",
@@ -539,8 +541,9 @@
           {
             id: "language-docs",
             title: "日英雙語能力與技術文書排版",
+            icon: "languages",
+            iconTheme: "purple",
             defaultStatus: "done",
-            desc: "取得日語檢定 JLPT N1 與 TOEIC 800 認證，能獨立進行日文技術文件翻譯與英文規格閱讀，並具備 Word、PowerPoint 文書處理與專業排版能力。",
             topics: [
               "JLPT N1 日語檢定（技術文件翻譯）",
               "TOEIC 800 英語技術閱讀與溝通",
@@ -562,8 +565,9 @@
           {
             id: "ipas-robotics",
             title: "iPAS 機器人工程師（中階）",
+            icon: "bot",
+            iconTheme: "amber",
             defaultStatus: "done",
-            desc: "通過經濟部產業人才能力鑑定（iPAS）機器人工程師中階認證，掌握機器人基礎理論、感測與驅動概念及產品／機電整合實務認知。",
             topics: [
               "iPAS 機器人工程師中階核心學科",
               "機器人機構與感測致動概念",
@@ -576,8 +580,9 @@
           {
             id: "arduino-esp32",
             title: "Arduino & ESP32 開發應用",
+            icon: "cpu",
+            iconTheme: "emerald",
             defaultStatus: "done",
-            desc: "熟悉使用 Arduino 與 ESP32 開發板進行感測器讀取、IO 控制與基礎物聯網（Wi-Fi）原型實作，能搭配現有函式庫完成產品驗證與測試。",
             topics: [
               "Arduino 開發環境與基本 I/O 控制",
               "ESP32 物聯網原型開發與測試",
@@ -598,9 +603,10 @@
           {
             id: "programming-tooling",
             title: "C 語言 / Python / Linux & Git（學無止盡）",
+            icon: "terminal",
+            iconTheme: "purple",
             hideStatus: true,
             defaultStatus: "none",
-            desc: "目前皆處於基礎與初學累積階段（C 與 Python 僅會一點、Linux 與 Git 剛入門），保持學無止盡的心態持續練習與實作。",
             topics: [
               "C 語言：基本語法、流程控制、指標概念",
               "Python：基礎語法與簡易自動化／數據腳本",
@@ -624,8 +630,9 @@
           {
             id: "dsa",
             title: "Data Structures & Algorithms",
+            icon: "code-2",
+            iconTheme: "slate",
             defaultStatus: "planned",
-            desc: "目前尚未學習過資料結構與演算法，規劃待 C 與 Python 基礎更穩固後，再逐步補強運算邏輯與程式效能概念。",
             topics: [
               "基本線性資料結構（尚未學習）",
               "搜尋與排序演算法基礎（尚未學習）",
@@ -638,8 +645,9 @@
           {
             id: "bus-protocols",
             title: "硬體通訊協定 (UART / SPI / I2C / CAN)",
+            icon: "radio",
+            iconTheme: "slate",
             defaultStatus: "planned",
-            desc: "目前對此類通訊協定尚不熟悉，過去僅透過開發板現成函式庫呼叫使用，尚未深入底層時序規格、波形量測除錯與 CAN-Bus。",
             topics: [
               "UART 串列通訊協定基礎（不熟／待學）",
               "SPI / I2C 時序與除錯（不熟／待學）",
@@ -652,8 +660,9 @@
           {
             id: "advanced-embedded",
             title: "進階韌體與系統 (Cortex-M / RTOS / Embedded Linux)",
+            icon: "layers",
+            iconTheme: "slate",
             defaultStatus: "planned",
-            desc: "ARM Cortex-M 底層暫存器與中斷架構、FreeRTOS 多工排程、Firmware HAL 與 Embedded Linux / Yocto 等領域目前皆尚未涉獵，視產品工程實務需求列為長期觀察方向。",
             topics: [
               "ARM Cortex-M 架構與中斷（尚未接觸）",
               "FreeRTOS 即時多工系統（尚未接觸）",
@@ -874,6 +883,14 @@
       });
     }
 
+    const ICON_THEME_CLASSES = {
+      emerald: 'bg-emerald-500/10 border-emerald-500/25 text-emerald-300',
+      blue: 'bg-blue-500/10 border-blue-500/25 text-blue-300',
+      purple: 'bg-purple-500/10 border-purple-500/25 text-purple-300',
+      amber: 'bg-amber-500/10 border-amber-500/25 text-amber-300',
+      slate: 'bg-slate-800/80 border-slate-700/70 text-slate-400'
+    };
+
     function createNodeCard(node, phaseNum, status, isSingleInPhase = false) {
       const card = document.createElement('div');
       card.onclick = () => openDrawer(node.id);
@@ -895,18 +912,29 @@
         extraClass = `${extraClass} node-in-progress`.trim();
       }
 
-      card.className = `group cursor-pointer rounded-xl border p-5 transition-all duration-200 hover:-translate-y-0.5 backdrop-blur flex flex-col justify-between ${statusBorder} ${extraClass}`;
+      const nodeIcon = node.icon || 'sparkles';
+      const iconBoxClass = ICON_THEME_CLASSES[node.iconTheme] || ICON_THEME_CLASSES.slate;
+
+      card.className = `group relative overflow-hidden cursor-pointer rounded-xl border p-5 transition-all duration-200 hover:-translate-y-0.5 backdrop-blur flex flex-col justify-between ${statusBorder} ${extraClass}`;
 
       card.innerHTML = `
-        <div class="space-y-2">
+        <div class="space-y-3 relative z-10">
           <div class="flex items-center justify-between">
             <span class="text-[10px] font-mono text-slate-500 uppercase tracking-wider">NODE &bull; 0${phaseNum}</span>
             ${statusBadge}
           </div>
-          <h4 class="text-base font-bold text-white group-hover:text-purple-300 transition-colors">${node.title}</h4>
-          <p class="text-xs text-slate-400 leading-relaxed line-clamp-2">${node.desc}</p>
+          <div class="flex items-center justify-between gap-3">
+            <h4 class="text-base font-bold text-white group-hover:text-purple-300 transition-colors">${node.title}</h4>
+            <div class="w-10 h-10 rounded-xl border flex items-center justify-center shrink-0 transition-transform duration-200 group-hover:scale-105 ${iconBoxClass}">
+              <i data-lucide="${nodeIcon}" class="w-5 h-5"></i>
+            </div>
+          </div>
+          ${node.desc ? `<p class="text-xs text-slate-400 leading-relaxed line-clamp-2">${node.desc}</p>` : ''}
         </div>
-        <div class="pt-4 mt-3 border-t border-slate-800/60 flex items-center justify-between text-xs font-mono text-slate-500 group-hover:text-purple-400 transition-colors">
+        <div class="pointer-events-none absolute -right-2 -bottom-2 opacity-[0.06] group-hover:opacity-[0.12] transition-opacity">
+          <i data-lucide="${nodeIcon}" class="w-24 h-24"></i>
+        </div>
+        <div class="relative z-10 pt-4 mt-3 border-t border-slate-800/60 flex items-center justify-between text-xs font-mono text-slate-500 group-hover:text-purple-400 transition-colors">
           <span>查看細節 & 資源</span>
           <i data-lucide="chevron-right" class="w-3.5 h-3.5 group-hover:translate-x-0.5 transition-transform"></i>
         </div>
@@ -941,7 +969,14 @@
       // Fill Drawer details
       document.getElementById('drawer-phase-badge').textContent = `Phase 0${foundPhase.phase}`;
       document.getElementById('drawer-title').textContent = foundNode.title;
-      document.getElementById('drawer-desc').textContent = foundNode.desc;
+      const descSection = document.getElementById('drawer-desc-section');
+      if (foundNode.desc) {
+        descSection.classList.remove('hidden');
+        document.getElementById('drawer-desc').textContent = foundNode.desc;
+      } else {
+        descSection.classList.add('hidden');
+        document.getElementById('drawer-desc').textContent = '';
+      }
 
       const statusPill = document.getElementById('drawer-status-pill');
       const statusSection = document.getElementById('drawer-status-section');
